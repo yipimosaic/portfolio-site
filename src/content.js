@@ -18,7 +18,7 @@ export const site = {
     { value: '04', label: '跨领域身份 / DISCIPLINES' }
   ],
   projects: [
-    { no: '01', title: 'MG', english: 'MOTION PROJECT / VIDEO', category: '动态影像 / 视频', year: '—', image: '/media/MG-cover.png', alt: 'MG 视频封面：绿色光效中的运动鞋', video: '/media/MG-web.mp4' },
+    { no: '01', title: 'MG', english: 'MOTION PROJECT / VIDEO', category: '动态影像 / 视频', year: '—', image: '/media/MG-cover-dark.png', alt: 'MG 视频封面：黑色背景中带轮廓光的足球鞋', video: '/media/MG-web.mp4' },
     { no: '02', title: '项目名称待补充', english: 'PROJECT TITLE / 02', category: '摄影指导 / 视觉', year: '20XX', image: '/media/project-02.jpg', alt: '摄影机设备示意图' },
     { no: '03', title: '项目名称待补充', english: 'PROJECT TITLE / 03', category: '美术指导 / 场景', year: '20XX', image: '/media/project-03.jpg', alt: '自然场景示意图' },
     { no: '04', title: '项目名称待补充', english: 'PROJECT TITLE / 04', category: '视觉设计 / 项目', year: '20XX', image: '/media/project-04.jpg', alt: '舞台现场示意图' }
