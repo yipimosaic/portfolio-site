@@ -13,8 +13,8 @@ export const site = {
   location: 'CHINA / AVAILABLE WORLDWIDE',
   portrait: '/media/portrait.png',
   stats: [
-    { value: '—', label: '创作年限 / YEARS' },
-    { value: '—', label: '完成项目 / PROJECTS' },
+    { value: '10', label: '创作年限 / YEARS' },
+    { value: '200+', label: '完成项目 / PROJECTS' },
     { value: '04', label: '跨领域身份 / DISCIPLINES' }
   ],
   projects: [
