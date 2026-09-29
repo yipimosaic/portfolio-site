@@ -11,7 +11,7 @@ export const site = {
   phone: '15601624399',
   wechat: 'Xy243244628',
   location: 'CHINA / AVAILABLE WORLDWIDE',
-  portrait: '/media/portrait.jpg',
+  portrait: '/media/portrait.png',
   stats: [
     { value: '—', label: '创作年限 / YEARS' },
     { value: '—', label: '完成项目 / PROJECTS' },
