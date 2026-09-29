@@ -1,0 +1,92 @@
+import React, { useEffect, useState } from 'react'
+import { createRoot } from 'react-dom/client'
+import { site } from './content'
+import GradientWaves from './GradientWaves'
+import './style.css'
+
+const Arrow = ({ diagonal = false }) => <span aria-hidden="true">{diagonal ? '↗' : '→'}</span>
+
+function App() {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const closeMenu = () => setMenuOpen(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  return <>
+    <header className={`nav-shell${scrolled ? ' is-scrolled' : ''}`}>
+      <a className="brand" href="#home" onClick={closeMenu} aria-label="返回首页">
+        <span className="brand-box">{site.mark}</span><span>INDEPENDENT IMAGE MAKER</span>
+      </a>
+      <button className="menu-toggle" type="button" aria-expanded={menuOpen} aria-controls="main-nav" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? 'CLOSE ×' : 'MENU +'}</button>
+      <nav id="main-nav" className={menuOpen ? 'nav-links open' : 'nav-links'} aria-label="主导航">
+        <a href="#about" onClick={closeMenu}>关于 / ABOUT</a>
+        <a href="#work" onClick={closeMenu}>作品 / WORK</a>
+        <a href="#strengths" onClick={closeMenu}>能力 / SERVICES</a>
+        <a className="nav-contact" href="#contact" onClick={closeMenu}>联系我 <Arrow diagonal /></a>
+      </nav>
+    </header>
+
+    <main>
+      <section className="hero" id="home" aria-labelledby="hero-title">
+        <video className="hero-video" autoPlay muted loop playsInline poster="/media/project-03.jpg" aria-hidden="true"><source src="/media/hero-motion.webm" type="video/webm" /></video>
+        <div className="hero-shade" />
+        <div className="hero-grain" />
+        <div className="hero-inner container">
+          <div className="hero-topline mono"><span>VISUAL PORTFOLIO / 2026</span><span>AVAILABLE FOR COLLABORATION <i className="status-dot" /></span></div>
+          <div className="hero-center">
+            <p className="eyebrow">DIRECTOR · ART DIRECTOR · DOP · VISUAL DESIGNER</p>
+            <h1 id="hero-title">{site.heroTitle.map((line, i) => <span className={i === 1 ? 'blur-line' : ''} key={line}>{line}</span>)}</h1>
+            <div className="hero-bottom-copy"><p>{site.heroChinese}</p><p>{site.heroSubline}</p></div>
+          </div>
+          <div className="hero-bottom mono"><a href="#work">SCROLL TO EXPLORE <span>↓</span></a><span>01 / 05</span><span>IMAGES SHAPE STORIES.</span></div>
+        </div>
+      </section>
+
+      <section className="about section-pad" id="about" aria-labelledby="about-heading">
+        <div className="about-waves" aria-hidden="true">
+          <GradientWaves
+            horizonColor="#f0efeb"
+            waveColor="#242523"
+            crestColor="#efeee9"
+            speed={0.25}
+            amplitude={2.5}
+            waveScale={0.6}
+            waveRatio={0.9}
+            swell={35}
+            turbulence={20}
+            detail="low"
+            opacity={0.85}
+            mouseInteraction={false}
+            grainIntensity={0.035}
+          />
+        </div>
+        <div className="container">
+          <SectionIntro index="01" label="THE PERSON BEHIND THE FRAME" />
+          <div className="about-grid">
+            <div className="about-left"><p className="section-kicker">导演 / 美术指导 / 摄影指导 / 视觉设计师</p><h2 id="about-heading">让视觉<br /><em>有表达。</em></h2><div className="about-photo" aria-label="头像位置，等待替换为本人照片">{site.portrait ? <img src={site.portrait} alt={`${site.name} 肖像`} /> : <div className="portrait-placeholder"><span className="portrait-cross">+</span><span className="mono">PORTRAIT<br />TO BE ADDED</span></div>}<span className="photo-tag mono">FIG. 01 / PROFILE</span></div></div>
+            <div className="about-right"><span className="about-big-asterisk">✳</span><p className="about-lead">{site.introduction}</p><p className="about-detail">{site.experience}</p><div className="about-contact mono"><span>CONTACT / 合作联系</span><a href={`mailto:${site.email}`}>{site.email} <Arrow diagonal /></a><a href={`tel:${site.phone}`}>{site.phone} <Arrow diagonal /></a><span>WECHAT / {site.wechat}</span></div></div>
+          </div>
+          <div className="stats">{site.stats.map(item => <div className="stat" key={item.label}><strong>{item.value}</strong><span className="mono">{item.label}</span></div>)}</div>
+        </div>
+      </section>
+
+      <section className="work section-pad" id="work" aria-labelledby="work-heading">
+        <div className="container"><SectionIntro index="02" label="SELECTED WORKS / 作品精选" /><div className="work-heading"><h2 id="work-heading">SELECTED<br /><span>WORKS<span className="period">.</span></span></h2><p>一些关于光、空间、人物与叙事的实验。<br />以下图片为版式示意，后续可替换成你的真实作品。</p></div><div className="project-grid">{site.projects.map((project, index) => <article className={`project-card project-${index + 1}`} key={project.no}><div className="project-image"><img src={project.image} alt={project.alt} loading="lazy" /><span className="image-number mono">FRAME / {project.no}</span><span className="project-arrow" aria-hidden="true">↗</span></div><div className="project-meta"><span className="mono">{project.no} / {project.category}</span><span className="mono">{project.year}</span></div><h3>{project.title}</h3><p className="mono project-en">{project.english}</p></article>)}</div></div>
+      </section>
+
+      <section className="strengths section-pad" id="strengths" aria-labelledby="strengths-heading"><div className="container"><SectionIntro index="03" label="WHAT I BRING TO THE FRAME" /><div className="strength-head"><h2 id="strengths-heading">ONE VISION.<br /><em>FOUR LENSES.</em></h2><p>从方向到细节，<br />让每个环节服务同一个视觉目标。</p></div><div className="strength-grid">{site.strengths.map(item => <article className="strength-card" key={item.num}><div className="strength-card-top mono"><span>{item.num} / 04</span><span>↗</span></div><div><span className="strength-symbol" aria-hidden="true">{item.num === '01' ? '◯' : item.num === '02' ? '▧' : item.num === '03' ? '✳' : '⌁'}</span><h3>{item.title}</h3><p className="mono strength-en">{item.en}</p><p className="strength-text">{item.text}</p></div></article>)}</div></div></section>
+
+      <footer className="contact" id="contact"><div className="container contact-inner"><div className="contact-top mono"><span>04 / LET'S MAKE SOMETHING MATTER</span><span>{site.location}</span></div><div className="contact-main"><p>有想法？让我们聊聊。</p><h2>LET'S<br /><em>CREATE.</em></h2><a className="email-button" href={`mailto:${site.email}`}>发起合作 <Arrow diagonal /></a></div><div className="contact-bottom"><div><span className="mono">EMAIL</span><a href={`mailto:${site.email}`}>{site.email}</a></div><div><span className="mono">PHONE</span><a href={`tel:${site.phone}`}>{site.phone}</a></div><div><span className="mono">WECHAT</span><span>{site.wechat}</span></div><a href="#home" className="backtop mono">BACK TO TOP ↑</a></div><div className="footer-line mono"><span>© {new Date().getFullYear()} {site.name}</span><span>DIRECTED WITH INTENTION.</span></div></div></footer>
+    </main>
+  </>
+}
+
+function SectionIntro({ index, label }) { return <div className="section-intro mono"><span>/{index}</span><span>{label}</span><span className="intro-line" /></div> }
+
+createRoot(document.getElementById('root')).render(<App />)
