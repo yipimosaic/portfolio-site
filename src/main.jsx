@@ -55,7 +55,7 @@ function App() {
           <div className="hero-center">
             <p className="eyebrow">DIRECTOR · ART DIRECTOR · DOP · VISUAL DESIGNER</p>
             <h1 id="hero-title">{site.heroTitle.map((line, i) => <span className={i === 1 ? 'blur-line' : ''} key={line}>{line}</span>)}</h1>
-            <div className="hero-bottom-copy"><p>{site.heroChinese}</p><p>{site.heroSubline}</p></div>
+            <div className="hero-bottom-copy"><p>{site.heroStatement}</p><p>{site.heroSubline}</p></div>
           </div>
           <div className="hero-bottom mono"><a href="#work">SCROLL TO EXPLORE <span>↓</span></a><span>01 / 05</span><span>IMAGES SHAPE STORIES.</span></div>
         </div>
