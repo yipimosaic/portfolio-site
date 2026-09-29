@@ -20,8 +20,6 @@ npm run dev
 
 当前未收到简历与真实作品，姓名、履历、统计数字和项目均为待填内容。现用图片仅作版式示意，不代表本人作品。
 
-首页下方的个人经历区使用你提供的 React Bits `GradientWaves` 组件作为动态背景。参数位于 `src/main.jsx`，组件实现位于 `src/GradientWaves.jsx`。
-
 ## 示意素材
 
 首页视频：MDN CC0 flower.webm。项目示意图：Unsplash。发布正式作品集时，建议全部换成你本人有权展示的作品及肖像。

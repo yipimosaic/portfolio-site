@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { site } from './content'
-import GradientWaves from './GradientWaves'
 import './style.css'
 
 const Arrow = ({ diagonal = false }) => <span aria-hidden="true">{diagonal ? '↗' : '→'}</span>
@@ -49,23 +48,6 @@ function App() {
       </section>
 
       <section className="about section-pad" id="about" aria-labelledby="about-heading">
-        <div className="about-waves" aria-hidden="true">
-          <GradientWaves
-            horizonColor="#f0efeb"
-            waveColor="#242523"
-            crestColor="#efeee9"
-            speed={0.25}
-            amplitude={2.5}
-            waveScale={0.6}
-            waveRatio={0.9}
-            swell={35}
-            turbulence={20}
-            detail="low"
-            opacity={0.85}
-            mouseInteraction={false}
-            grainIntensity={0.035}
-          />
-        </div>
         <div className="container">
           <SectionIntro index="01" label="THE PERSON BEHIND THE FRAME" />
           <div className="about-grid">
