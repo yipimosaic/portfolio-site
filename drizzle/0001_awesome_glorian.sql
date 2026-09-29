@@ -1,0 +1,1 @@
+ALTER TABLE `projects` ADD `gallery_images` text DEFAULT '[]' NOT NULL;

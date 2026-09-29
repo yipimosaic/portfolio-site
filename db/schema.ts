@@ -8,6 +8,7 @@ export const projects = sqliteTable("projects", {
   year: text("year").notNull().default(""),
   description: text("description").notNull().default(""),
   imageUrl: text("image_url").notNull(),
+  galleryImages: text("gallery_images").notNull().default("[]"),
   videoUrl: text("video_url").notNull().default(""),
   published: integer("published", { mode: "boolean" }).notNull().default(true),
   sortOrder: integer("sort_order").notNull().default(0),

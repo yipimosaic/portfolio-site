@@ -26,9 +26,9 @@ export async function POST(request) {
     const id = crypto.randomUUID();
     const now = new Date().toISOString();
     await db.prepare(`INSERT INTO projects
-      (id, title, english, category, year, description, image_url, video_url, published, sort_order, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
-      .bind(id, item.title, item.english, item.category, item.year, item.description, item.image, item.video,
+      (id, title, english, category, year, description, image_url, gallery_images, video_url, published, sort_order, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+      .bind(id, item.title, item.english, item.category, item.year, item.description, item.image, JSON.stringify(item.gallery), item.video,
         item.published, item.sortOrder, now, now).run();
     return Response.json({ id }, { status: 201 });
   } catch (error) {

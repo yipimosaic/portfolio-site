@@ -11,9 +11,9 @@ export async function PUT(request, context) {
     if (parsed.error) return Response.json({ error: parsed.error }, { status: 400 });
     const item = parsed.value;
     const result = await getDatabase().prepare(`UPDATE projects SET
-      title = ?, english = ?, category = ?, year = ?, description = ?, image_url = ?, video_url = ?,
+      title = ?, english = ?, category = ?, year = ?, description = ?, image_url = ?, gallery_images = ?, video_url = ?,
       published = ?, sort_order = ?, updated_at = ? WHERE id = ?`)
-      .bind(item.title, item.english, item.category, item.year, item.description, item.image, item.video,
+      .bind(item.title, item.english, item.category, item.year, item.description, item.image, JSON.stringify(item.gallery), item.video,
         item.published, item.sortOrder, new Date().toISOString(), id).run();
     if (!result.meta.changes) return Response.json({ error: "项目不存在。" }, { status: 404 });
     return Response.json({ ok: true });

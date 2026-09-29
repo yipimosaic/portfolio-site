@@ -11,8 +11,11 @@ export default function Portfolio() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [activeVideo, setActiveVideo] = useState(null)
+  const [activeGallery, setActiveGallery] = useState(null)
+  const [galleryIndex, setGalleryIndex] = useState(0)
   const [projects, setProjects] = useState(site.projects)
   const videoDialogRef = useRef(null)
+  const galleryDialogRef = useRef(null)
   const closeMenu = () => setMenuOpen(false)
 
   useEffect(() => {
@@ -34,6 +37,13 @@ export default function Portfolio() {
       dialog.close()
     }
   }, [activeVideo])
+
+  useEffect(() => {
+    const dialog = galleryDialogRef.current
+    if (!dialog) return
+    if (activeGallery && !dialog.open) dialog.showModal()
+    else if (!activeGallery && dialog.open) dialog.close()
+  }, [activeGallery])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -96,7 +106,7 @@ export default function Portfolio() {
       </section>
 
       <section className="work section-pad" id="work" aria-labelledby="work-heading">
-        <div className="container"><SectionIntro index="02" label="SELECTED WORKS / 作品精选" /><div className="work-heading"><h2 id="work-heading">SELECTED<br /><span>WORKS<span className="period">.</span></span></h2><p>一些关于光、空间、人物与叙事的实验。<br />点击视频作品的封面即可观看；项目内容会持续更新。</p></div><div className="project-grid">{projects.map((project, index) => <article className={`project-card project-${index + 1}`} key={project.id || project.no}><ProjectImage project={project} onPlay={() => setActiveVideo(project)} /><div className="project-meta"><span className="mono">{project.no} / {project.category}</span><span className="mono">{project.year}</span></div><h3>{project.title}</h3><p className="mono project-en">{project.english}</p>{project.description && <p className="project-description">{project.description}</p>}</article>)}</div></div>
+        <div className="container"><SectionIntro index="02" label="SELECTED WORKS / 作品精选" /><div className="work-heading"><h2 id="work-heading">SELECTED<br /><span>WORKS<span className="period">.</span></span></h2><p>一些关于光、空间、人物与叙事的实验。<br />点击封面浏览图库；视频作品点击后播放。</p></div><div className="project-grid">{projects.map((project, index) => <article className={`project-card project-${index + 1}`} key={project.id || project.no}><ProjectImage project={project} onPlay={() => setActiveVideo(project)} onBrowse={() => { setActiveGallery(project); setGalleryIndex(0) }} /><div className="project-meta"><span className="mono">{project.no} / {project.category}</span><span className="mono">{project.year}</span></div><h3>{project.title}</h3><p className="mono project-en">{project.english}</p>{project.description && <p className="project-description">{project.description}</p>}</article>)}</div></div>
       </section>
 
       <section className="strengths section-pad" id="strengths" aria-labelledby="strengths-heading"><div className="container"><SectionIntro index="03" label="WHAT I BRING TO THE FRAME" /><div className="strength-head"><h2 id="strengths-heading">ONE VISION.<br /><em>FOUR LENSES.</em></h2><p>从方向到细节，<br />让每个环节服务同一个视觉目标。</p></div><div className="strength-grid">{site.strengths.map(item => <article className="strength-card" key={item.num}><div className="strength-card-top mono"><span>{item.num} / 04</span><span>↗</span></div><div><span className="strength-symbol" aria-hidden="true">{item.num === '03' ? <AsteriskMark /> : item.num === '01' ? '◯' : item.num === '02' ? '▧' : '⌁'}</span><h3>{item.title}</h3><p className="mono strength-en">{item.en}</p><p className="strength-text">{item.text}</p></div></article>)}</div></div></section>
@@ -115,13 +125,28 @@ export default function Portfolio() {
         {activeVideo && <video key={activeVideo.video} src={activeVideo.video} poster={activeVideo.image} controls playsInline preload="metadata" />}
       </div>
     </dialog>
+    <dialog
+      ref={galleryDialogRef}
+      className="gallery-dialog"
+      aria-label={activeGallery ? `${activeGallery.title} 图片图库` : '作品图库'}
+      onClose={() => setActiveGallery(null)}
+      onClick={event => { if (event.target === event.currentTarget) setActiveGallery(null) }}
+    >
+      <div className="gallery-dialog-inner">
+        <div className="video-dialog-top mono"><span>{activeGallery ? `PROJECT ${activeGallery.no} / ${activeGallery.title} · ${galleryIndex + 1} / ${(activeGallery.gallery || [activeGallery.image]).length}` : 'PROJECT GALLERY'}</span><button type="button" onClick={() => setActiveGallery(null)} aria-label="关闭图库">CLOSE ×</button></div>
+        {activeGallery && <>
+          <div className="gallery-stage"><img src={(activeGallery.gallery || [activeGallery.image])[galleryIndex]} alt={`${activeGallery.title} ${galleryIndex + 1}`} /></div>
+          {(activeGallery.gallery || [activeGallery.image]).length > 1 && <div className="gallery-controls"><button type="button" onClick={() => setGalleryIndex(index => (index - 1 + (activeGallery.gallery || [activeGallery.image]).length) % (activeGallery.gallery || [activeGallery.image]).length)} aria-label="上一张">← PREV</button><div className="gallery-thumbs">{(activeGallery.gallery || [activeGallery.image]).map((image, index) => <button key={image} type="button" className={index === galleryIndex ? 'is-active' : ''} onClick={() => setGalleryIndex(index)}><img src={image} alt="" /></button>)}</div><button type="button" onClick={() => setGalleryIndex(index => (index + 1) % (activeGallery.gallery || [activeGallery.image]).length)} aria-label="下一张">NEXT →</button></div>}
+        </>}
+      </div>
+    </dialog>
   </>
 }
 
-function ProjectImage({ project, onPlay }) {
-  const image = <><img src={project.image} alt={project.alt} loading="lazy" /><span className="image-number mono">FRAME / {project.no}</span><span className="project-arrow" aria-hidden="true">{project.video ? '▶' : '↗'}</span>{project.video && <span className="project-play-label mono">PLAY VIDEO / 播放视频</span>}</>
-  return <div className={`project-image${project.video ? ' has-video' : ''}`}>{project.video ? <button className="project-play-button" type="button" onClick={onPlay} aria-label={`播放 ${project.title} 视频`}>{image}</button> : image}</div>
+function ProjectImage({ project, onPlay, onBrowse }) {
+  const galleryCount = (project.gallery || [project.image]).length
+  const image = <><img src={project.image} alt={project.alt} loading="lazy" /><span className="image-number mono">FRAME / {project.no}{galleryCount > 1 ? ` · ${galleryCount} IMAGES` : ''}</span><span className="project-arrow" aria-hidden="true">{project.video ? '▶' : '↗'}</span>{project.video && <span className="project-play-label mono">PLAY VIDEO / 播放视频</span>}</>
+  return <div className={`project-image${project.video ? ' has-video' : ''}`}>{project.video ? <button className="project-play-button" type="button" onClick={onPlay} aria-label={`播放 ${project.title} 视频`}>{image}</button> : <button className="project-browse-button" type="button" onClick={onBrowse} aria-label={`浏览 ${project.title} 图片`}>{image}</button>}</div>
 }
 
 function SectionIntro({ index, label }) { return <div className="section-intro mono"><span>/{index}</span><span>{label}</span><span className="intro-line" /></div> }
-

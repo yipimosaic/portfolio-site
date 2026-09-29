@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 
 const emptyProject = (sortOrder = 1) => ({
-  title: '', english: '', category: '', year: '', description: '',
+  title: '', english: '', category: '', year: '', description: '', gallery: [],
   image: '', video: '', published: true, sortOrder,
 })
 
@@ -18,6 +18,7 @@ export default function AdminClient() {
   const [selectedId, setSelectedId] = useState(null)
   const [form, setForm] = useState(emptyProject())
   const [coverFile, setCoverFile] = useState(null)
+  const [galleryFiles, setGalleryFiles] = useState([])
   const [videoFile, setVideoFile] = useState(null)
   const [kind, setKind] = useState('image')
   const [loading, setLoading] = useState(true)
@@ -39,9 +40,10 @@ export default function AdminClient() {
 
   function choose(project) {
     setSelectedId(project.id)
-    setForm({ ...project })
+    setForm({ ...project, gallery: project.gallery?.length ? project.gallery : (project.image ? [project.image] : []) })
     setKind(project.video ? 'video' : 'image')
     setCoverFile(null)
+    setGalleryFiles([])
     setVideoFile(null)
     setNotice('')
     setError('')
@@ -53,6 +55,7 @@ export default function AdminClient() {
     setForm(emptyProject(projects.length + 1))
     setKind('image')
     setCoverFile(null)
+    setGalleryFiles([])
     setVideoFile(null)
     setNotice('')
     setError('')
@@ -78,8 +81,15 @@ export default function AdminClient() {
       let next = { ...form }
       if (coverFile) {
         next.image = await upload(coverFile)
+        next.gallery = [next.image, ...(next.gallery || []).filter(image => image !== form.image)]
         setForm(previous => ({ ...previous, image: next.image }))
         setCoverFile(null)
+      }
+      if (galleryFiles.length) {
+        const uploaded = await Promise.all(galleryFiles.map(upload))
+        next.gallery = Array.from(new Set([...(next.gallery || []), ...uploaded]))
+        setForm(previous => ({ ...previous, gallery: next.gallery }))
+        setGalleryFiles([])
       }
       if (kind === 'video' && videoFile) {
         next.video = await upload(videoFile)
@@ -87,7 +97,9 @@ export default function AdminClient() {
         setVideoFile(null)
       }
       if (kind === 'image') next.video = ''
+      if (!next.image && next.gallery?.[0]) next.image = next.gallery[0]
       if (!next.image) throw new Error('请先选择项目封面图片。')
+      next.gallery = Array.from(new Set([next.image, ...(next.gallery || [])])).slice(0, 30)
       if (kind === 'video' && !next.video) throw new Error('请先选择项目视频。')
       const endpoint = selectedId ? `/api/admin/projects/${encodeURIComponent(selectedId)}` : '/api/admin/projects'
       const result = await readJson(await fetch(endpoint, {
@@ -95,7 +107,7 @@ export default function AdminClient() {
       }))
       const rows = await loadProjects()
       const saved = rows.find(project => project.id === (selectedId || result.id))
-      if (saved) { setSelectedId(saved.id); setForm({ ...saved }); setKind(saved.video ? 'video' : 'image') }
+      if (saved) { setSelectedId(saved.id); setForm({ ...saved, gallery: saved.gallery?.length ? saved.gallery : [saved.image] }); setKind(saved.video ? 'video' : 'image') }
       setNotice(next.published ? '已保存，作品集已同步更新。' : '草稿已保存，暂不在作品集展示。')
     } catch (err) {
       setError(err.message)
@@ -114,6 +126,7 @@ export default function AdminClient() {
       setSelectedId(null)
       setForm(emptyProject(rows.length + 1))
       setKind('image')
+      setGalleryFiles([])
       setNotice('项目已删除。')
     } catch (err) {
       setError(err.message)
@@ -150,6 +163,7 @@ export default function AdminClient() {
           <fieldset className="admin-type"><legend>作品类型</legend><label><input type="radio" name="kind" checked={kind === 'image'} onChange={() => { setKind('image'); setVideoFile(null) }} /> 图片作品</label><label><input type="radio" name="kind" checked={kind === 'video'} onChange={() => setKind('video')} /> 视频作品</label></fieldset>
 
           <div className="admin-upload-grid"><label className="admin-upload"><span>封面图片 <b>必填</b></span>{form.image && <img src={form.image} alt="当前封面" />}<strong>{coverFile ? coverFile.name : '选择或更换封面'}</strong><small>JPG / PNG / WEBP / AVIF</small><input type="file" accept="image/jpeg,image/png,image/webp,image/avif" onChange={event => setCoverFile(event.target.files?.[0] || null)} /></label>
+            <label className="admin-upload admin-gallery-upload"><span>图库图片 <b>可多选</b></span><div className="admin-gallery-preview">{(form.gallery || []).map((image, index) => <span key={image}><img src={image} alt={`图库 ${index + 1}`} /><button type="button" onClick={event => { event.preventDefault(); event.stopPropagation(); field('gallery', (form.gallery || []).filter((_, itemIndex) => itemIndex !== index)) }} aria-label={`删除第 ${index + 1} 张图片`}>×</button></span>)}</div><strong>{galleryFiles.length ? `已选择 ${galleryFiles.length} 张新图片` : '选择多张图片加入图库'}</strong><small>可一次选择多张 JPG / PNG / WEBP / AVIF，最多 30 张</small><input type="file" multiple accept="image/jpeg,image/png,image/webp,image/avif" onChange={event => setGalleryFiles(Array.from(event.target.files || []).slice(0, 30))} /></label>
             {kind === 'video' && <label className="admin-upload"><span>视频文件 <b>必填</b></span><span className="admin-video-symbol">▶</span><strong>{videoFile ? videoFile.name : form.video ? '已上传视频，可重新选择' : '选择视频'}</strong><small>MP4 / WEBM · 单个文件不超过 100 MB</small><input type="file" accept="video/mp4,video/webm" onChange={event => setVideoFile(event.target.files?.[0] || null)} /></label>}</div>
 
           <div className="admin-options"><label>展示顺序 <input type="number" min="0" max="9999" value={form.sortOrder} onChange={event => field('sortOrder', event.target.value)} /></label><label className="admin-publish"><input type="checkbox" checked={Boolean(form.published)} onChange={event => field('published', event.target.checked)} /> 在作品集展示</label></div>

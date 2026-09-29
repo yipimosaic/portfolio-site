@@ -24,7 +24,9 @@ body.is-opening{overflow:hidden}.opening-screen{position:fixed;inset:0;z-index:1
 
 /* Project video preview */
 .project-play-button{display:block;width:100%;height:100%;padding:0;border:0;background:#000;color:inherit;text-align:left;cursor:pointer}
+.project-browse-button{display:block;width:100%;height:100%;padding:0;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer}
 .project-play-button:focus-visible{outline:2px solid #eff0e9;outline-offset:-4px}
+.project-browse-button:focus-visible{outline:2px solid #eff0e9;outline-offset:-4px}
 .project-image.has-video{background:#000}
 .project-image.has-video img{object-fit:contain}
 .project-card:hover .project-image.has-video img,.project-image.has-video:focus-within img{filter:none}
@@ -37,3 +39,16 @@ body.is-opening{overflow:hidden}.opening-screen{position:fixed;inset:0;z-index:1
 .video-dialog-top button{border:1px solid #777a72;background:none;color:inherit;padding:9px 12px;font:inherit;cursor:pointer}
 .video-dialog-top button:hover,.video-dialog-top button:focus-visible{background:#f2f1eb;color:#101110}
 .video-dialog video{display:block;width:100%;max-height:calc(100dvh - 100px);background:#000;object-fit:contain}
+.gallery-dialog{width:min(1240px,calc(100vw - 32px));max-width:none;max-height:calc(100dvh - 32px);padding:0;border:1px solid #777a72;background:#101110;color:#f2f1eb;box-shadow:0 28px 100px rgba(0,0,0,.65)}
+.gallery-dialog::backdrop{background:rgba(0,0,0,.86);backdrop-filter:blur(10px)}
+.gallery-dialog-inner{padding:14px}
+.gallery-stage{height:min(72vh,760px);display:grid;place-items:center;background:#050605;overflow:hidden}
+.gallery-stage img{width:100%;height:100%;object-fit:contain;filter:none}
+.gallery-controls{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;padding-top:14px}
+.gallery-controls>button{border:1px solid #777a72;background:none;color:inherit;padding:10px 12px;font:11px 'DM Mono',monospace;cursor:pointer;white-space:nowrap}
+.gallery-controls>button:hover,.gallery-controls>button:focus-visible{background:#f2f1eb;color:#101110}
+.gallery-thumbs{display:flex;justify-content:center;gap:8px;overflow-x:auto;padding:2px}
+.gallery-thumbs button{width:64px;height:46px;border:1px solid #555850;background:#1b1c1a;padding:0;opacity:.55;flex:0 0 auto}
+.gallery-thumbs button.is-active{border-color:#f2f1eb;opacity:1}
+.gallery-thumbs img{width:100%;height:100%;object-fit:cover;filter:none}
+@media(max-width:760px){.gallery-stage{height:58vh}.gallery-controls{grid-template-columns:1fr 1fr}.gallery-thumbs{grid-column:1/-1;grid-row:1}.gallery-controls>button{font-size:10px}.gallery-controls>button:last-child{text-align:right}}
