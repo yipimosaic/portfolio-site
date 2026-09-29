@@ -60,7 +60,13 @@ export default function Portfolio() {
       <div className="opening-panel opening-panel--bottom" />
       <div className="opening-content">
         <div className="opening-index mono"><span>VISUAL PORTFOLIO</span><span>01 / OPENING</span></div>
-        <div className="opening-type-mask"><span className="opening-type">FRAME<br />BY FRAME.</span></div>
+        <div className="opening-type-mask">
+          <div className="opening-type" aria-label="WELCOME TO THE WORLD OF YIPIMASAIKE">
+            <span className="opening-type-line">WELCOME TO</span>
+            <span className="opening-type-line opening-type-line--blur">THE WORLD OF</span>
+            <span className="opening-type-line">YIPIMASAIKE</span>
+          </div>
+        </div>
         <div className="opening-progress"><span className="opening-progress-bar" /></div>
         <div className="opening-foot mono"><span>DIRECTED WITH INTENTION</span><span>EST. 2026</span></div>
       </div>

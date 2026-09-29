@@ -37,7 +37,7 @@ export function initMotion() {
       })
         .set('.opening-screen', { display: 'grid' })
         .from('.opening-index', { y: 45, autoAlpha: 0, duration: 0.7 })
-        .from('.opening-type', { yPercent: 100, scaleX: 0.8, autoAlpha: 0, duration: 1.1 }, '-=0.42')
+        .from('.opening-type-line', { yPercent: 120, scaleX: 0.82, autoAlpha: 0, duration: 1.05, stagger: 0.09 }, '-=0.42')
         .fromTo('.opening-progress-bar', { scaleX: 0 }, { scaleX: 1, duration: 1.15, ease: 'power2.inOut' }, '-=0.75')
         .to('.opening-content', { autoAlpha: 0, y: -18, duration: 0.3 }, '+=0.13')
         .to('.opening-panel--top', { yPercent: -101, duration: 1.3, ease: 'power4.inOut' }, '-=0.04')
