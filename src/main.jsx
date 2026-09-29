@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { site } from './content'
 import { initMotion } from './motion'
@@ -10,7 +10,20 @@ const AsteriskMark = ({ className = '' }) => <svg className={className} viewBox=
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [activeVideo, setActiveVideo] = useState(null)
+  const videoDialogRef = useRef(null)
   const closeMenu = () => setMenuOpen(false)
+
+  useEffect(() => {
+    const dialog = videoDialogRef.current
+    if (!dialog) return
+    if (activeVideo && !dialog.open) {
+      dialog.showModal()
+      dialog.querySelector('video')?.play().catch(() => {})
+    } else if (!activeVideo && dialog.open) {
+      dialog.close()
+    }
+  }, [activeVideo])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -73,14 +86,31 @@ function App() {
       </section>
 
       <section className="work section-pad" id="work" aria-labelledby="work-heading">
-        <div className="container"><SectionIntro index="02" label="SELECTED WORKS / 作品精选" /><div className="work-heading"><h2 id="work-heading">SELECTED<br /><span>WORKS<span className="period">.</span></span></h2><p>一些关于光、空间、人物与叙事的实验。<br />以下图片为版式示意，后续可替换成你的真实作品。</p></div><div className="project-grid">{site.projects.map((project, index) => <article className={`project-card project-${index + 1}`} key={project.no}><div className="project-image"><img src={project.image} alt={project.alt} loading="lazy" /><span className="image-number mono">FRAME / {project.no}</span><span className="project-arrow" aria-hidden="true">↗</span></div><div className="project-meta"><span className="mono">{project.no} / {project.category}</span><span className="mono">{project.year}</span></div><h3>{project.title}</h3><p className="mono project-en">{project.english}</p></article>)}</div></div>
+        <div className="container"><SectionIntro index="02" label="SELECTED WORKS / 作品精选" /><div className="work-heading"><h2 id="work-heading">SELECTED<br /><span>WORKS<span className="period">.</span></span></h2><p>一些关于光、空间、人物与叙事的实验。<br />点击 MG 项目封面观看视频，其余项目内容可继续更新。</p></div><div className="project-grid">{site.projects.map((project, index) => <article className={`project-card project-${index + 1}`} key={project.no}><ProjectImage project={project} onPlay={() => setActiveVideo(project)} /><div className="project-meta"><span className="mono">{project.no} / {project.category}</span><span className="mono">{project.year}</span></div><h3>{project.title}</h3><p className="mono project-en">{project.english}</p></article>)}</div></div>
       </section>
 
       <section className="strengths section-pad" id="strengths" aria-labelledby="strengths-heading"><div className="container"><SectionIntro index="03" label="WHAT I BRING TO THE FRAME" /><div className="strength-head"><h2 id="strengths-heading">ONE VISION.<br /><em>FOUR LENSES.</em></h2><p>从方向到细节，<br />让每个环节服务同一个视觉目标。</p></div><div className="strength-grid">{site.strengths.map(item => <article className="strength-card" key={item.num}><div className="strength-card-top mono"><span>{item.num} / 04</span><span>↗</span></div><div><span className="strength-symbol" aria-hidden="true">{item.num === '03' ? <AsteriskMark /> : item.num === '01' ? '◯' : item.num === '02' ? '▧' : '⌁'}</span><h3>{item.title}</h3><p className="mono strength-en">{item.en}</p><p className="strength-text">{item.text}</p></div></article>)}</div></div></section>
 
       <footer className="contact" id="contact"><div className="container contact-inner"><div className="contact-top mono"><span>04 / LET'S MAKE SOMETHING MATTER</span><span>{site.location}</span></div><div className="contact-main"><p>有想法？让我们聊聊。</p><h2>LET'S<br /><em>CREATE.</em></h2><a className="email-button" href={`mailto:${site.email}`}>发起合作 <Arrow diagonal /></a></div><div className="contact-bottom"><div><span className="mono">EMAIL</span><a href={`mailto:${site.email}`}>{site.email}</a></div><div><span className="mono">PHONE</span><a href={`tel:${site.phone}`}>{site.phone}</a></div><div><span className="mono">WECHAT</span><span>{site.wechat}</span></div><a href="#home" className="backtop mono">BACK TO TOP ↑</a></div><div className="footer-line mono"><span>© {new Date().getFullYear()} {site.name}</span><span>DIRECTED WITH INTENTION.</span></div></div></footer>
     </main>
+    <dialog
+      ref={videoDialogRef}
+      className="video-dialog"
+      aria-label={activeVideo ? `${activeVideo.title} 视频` : '作品视频'}
+      onClose={() => setActiveVideo(null)}
+      onClick={event => { if (event.target === event.currentTarget) setActiveVideo(null) }}
+    >
+      <div className="video-dialog-inner">
+        <div className="video-dialog-top mono"><span>{activeVideo ? `PROJECT ${activeVideo.no} / ${activeVideo.title}` : 'PROJECT VIDEO'}</span><button type="button" onClick={() => setActiveVideo(null)} aria-label="关闭视频">CLOSE ×</button></div>
+        {activeVideo && <video key={activeVideo.video} src={activeVideo.video} poster={activeVideo.image} controls playsInline preload="metadata" />}
+      </div>
+    </dialog>
   </>
+}
+
+function ProjectImage({ project, onPlay }) {
+  const image = <><img src={project.image} alt={project.alt} loading="lazy" /><span className="image-number mono">FRAME / {project.no}</span><span className="project-arrow" aria-hidden="true">{project.video ? '▶' : '↗'}</span>{project.video && <span className="project-play-label mono">PLAY VIDEO / 播放视频</span>}</>
+  return <div className={`project-image${project.video ? ' has-video' : ''}`}>{project.video ? <button className="project-play-button" type="button" onClick={onPlay} aria-label={`播放 ${project.title} 视频`}>{image}</button> : image}</div>
 }
 
 function SectionIntro({ index, label }) { return <div className="section-intro mono"><span>/{index}</span><span>{label}</span><span className="intro-line" /></div> }
