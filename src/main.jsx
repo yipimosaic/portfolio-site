@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { site } from './content'
+import { initMotion } from './motion'
 import './style.css'
 
 const Arrow = ({ diagonal = false }) => <span aria-hidden="true">{diagonal ? '↗' : '→'}</span>
@@ -17,7 +18,19 @@ function App() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useLayoutEffect(() => initMotion(), [])
+
   return <>
+    <div className="opening-screen" aria-hidden="true">
+      <div className="opening-panel opening-panel--top" />
+      <div className="opening-panel opening-panel--bottom" />
+      <div className="opening-content">
+        <div className="opening-index mono"><span>VISUAL PORTFOLIO</span><span>01 / OPENING</span></div>
+        <div className="opening-type-mask"><span className="opening-type">FRAME<br />BY FRAME.</span></div>
+        <div className="opening-progress"><span className="opening-progress-bar" /></div>
+        <div className="opening-foot mono"><span>DIRECTED WITH INTENTION</span><span>EST. 2026</span></div>
+      </div>
+    </div>
     <header className={`nav-shell${scrolled ? ' is-scrolled' : ''}`}>
       <a className="brand" href="#home" onClick={closeMenu} aria-label="返回首页">
         <span className="brand-box">{site.mark}</span><span>INDEPENDENT IMAGE MAKER</span>
