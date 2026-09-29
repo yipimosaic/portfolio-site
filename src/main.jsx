@@ -65,7 +65,7 @@ function App() {
         <div className="container">
           <SectionIntro index="01" label="THE PERSON BEHIND THE FRAME" />
           <div className="about-grid">
-            <div className="about-left"><p className="section-kicker">导演 / 美术指导 / 摄影指导 / 视觉设计师</p><h2 id="about-heading">让视觉<br /><em>有表达。</em></h2><div className="about-photo" aria-label="头像位置，等待替换为本人照片">{site.portrait ? <img src={site.portrait} alt={`${site.name} 肖像`} /> : <div className="portrait-placeholder"><span className="portrait-cross">+</span><span className="mono">PORTRAIT<br />TO BE ADDED</span></div>}<span className="photo-tag mono">FIG. 01 / PROFILE</span></div></div>
+            <div className="about-left"><p className="section-kicker">导演 / 美术指导 / 摄影指导 / 视觉设计师</p><h2 id="about-heading">让视觉<br /><em>有表达。</em></h2><div className="about-photo">{site.portrait ? <img src={site.portrait} alt="个人肖像" /> : <div className="portrait-placeholder"><span className="portrait-cross">+</span><span className="mono">PORTRAIT<br />TO BE ADDED</span></div>}<span className="photo-tag mono">FIG. 01 / PROFILE</span></div></div>
             <div className="about-right"><AsteriskMark className="about-big-asterisk" /><p className="about-lead">{site.introduction}</p><p className="about-detail">{site.experience}</p><div className="about-contact mono"><span>CONTACT / 合作联系</span><a href={`mailto:${site.email}`}>{site.email} <Arrow diagonal /></a><a href={`tel:${site.phone}`}>{site.phone} <Arrow diagonal /></a><span>WECHAT / {site.wechat}</span></div></div>
           </div>
           <div className="stats">{site.stats.map(item => <div className="stat" key={item.label}><strong>{item.value}</strong><span className="mono">{item.label}</span></div>)}</div>
