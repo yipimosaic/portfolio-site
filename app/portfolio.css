@@ -24,7 +24,7 @@ body.is-opening{overflow:hidden}.opening-screen{position:fixed;inset:0;z-index:1
 
 /* Project video preview */
 /* One viewport-sized wave surface shared by every section below the hero. */
-.wave-sections{position:relative;isolation:isolate;background:#0b0c0b;color:#f0efe9}
+.wave-sections{position:relative;isolation:isolate;overflow-x:clip;background:#0b0c0b;color:#f0efe9}
 .wave-backdrop{position:sticky;top:0;height:100vh;height:100lvh;margin-bottom:-100vh;margin-bottom:-100lvh;pointer-events:none;z-index:0;overflow:hidden;background:#0b0c0b}
 .wave-backdrop-shade{position:absolute;inset:0;background:rgba(11,12,11,.45)}
 .wave-sections>.about,.wave-sections>.work,.wave-sections>.strengths,.wave-sections>.contact{position:relative;z-index:1;background:transparent;color:#f0efe9}
@@ -37,6 +37,23 @@ body.is-opening{overflow:hidden}.opening-screen{position:fixed;inset:0;z-index:1
 .wave-sections .email-button:hover,.wave-sections .email-button:focus-visible{background:#f0efe9;color:#10110f}
 .wave-sections a:focus-visible{outline:2px solid #f0efe9;outline-offset:5px}
 .wave-sections ::selection{background:#f0efe9;color:#10110f}
+
+/* Soft reading zones stay attached to the copy as the waves move behind it. */
+.wave-sections .about{overflow:clip}
+.wave-sections .about-left,.wave-sections .about-right,.wave-sections .stats{position:relative;isolation:isolate}
+.wave-sections .about-left::before,.wave-sections .about-right::before,.wave-sections .stats::before{content:"";position:absolute;z-index:-1;pointer-events:none}
+.wave-sections .about-left::before{top:-70px;left:-100px;right:12%;height:440px;background:radial-gradient(ellipse at 40% 45%,rgba(11,12,11,.97) 25%,rgba(11,12,11,.8) 50%,transparent 76%)}
+.wave-sections .about-right{align-self:center;padding:35px 0}
+.wave-sections .about-right::before{inset:-100px -100px;background:radial-gradient(ellipse at center,rgba(11,12,11,.99) 38%,rgba(11,12,11,.96) 56%,rgba(11,12,11,.72) 68%,transparent 85%)}
+.wave-sections .about-contact{margin-top:64px;gap:20px}
+.wave-sections .stats::before{inset:-36px -60px;background:linear-gradient(180deg,transparent,rgba(11,12,11,.86) 25%,rgba(11,12,11,.94) 70%,transparent)}
+@media(max-width:760px){
+  .wave-sections .about-left::before{height:330px;right:-20px;left:-40px}
+  .wave-sections .about-right{padding:16px 0}
+  .wave-sections .about-right::before{inset:-30px -65px -50px;background:radial-gradient(ellipse at center,rgba(11,12,11,.99) 45%,rgba(11,12,11,.95) 60%,transparent 85%)}
+  .wave-sections .about-contact{margin-top:38px;gap:18px}
+  .wave-sections .stats::before{inset:-30px -20px}
+}
 
 .project-play-button{display:block;width:100%;height:100%;padding:0;border:0;background:#000;color:inherit;text-align:left;cursor:pointer}
 .project-browse-button{display:block;width:100%;height:100%;padding:0;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer}
