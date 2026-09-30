@@ -3,6 +3,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { site } from './content'
 import { initMotion } from './motion'
+import PatternWaves from './components/PatternWaves'
 
 const Arrow = ({ diagonal = false }) => <span aria-hidden="true">{diagonal ? '↗' : '→'}</span>
 const AsteriskMark = ({ className = '' }) => <svg className={className} viewBox="0 0 100 100" fill="none" aria-hidden="true" focusable="false"><path d="M50 5v90M5 50h90M18 18l64 64M82 18 18 82" stroke="currentColor" strokeWidth="5" strokeLinecap="square" /></svg>
@@ -100,6 +101,11 @@ export default function Portfolio() {
         </div>
       </section>
 
+      <div className="wave-sections">
+        <div className="wave-backdrop" aria-hidden="true">
+          <PatternWaves preset="silk" color="#ffffff" backgroundColor="#0b0c0b" speed={0.22} scale={1.25} opacity={0.55} fade="edges" intro={false} interactive cursorSize={50} cursorStrength={0.35} />
+          <div className="wave-backdrop-shade" />
+        </div>
       <section className="about section-pad" id="about" aria-labelledby="about-heading">
         <div className="container">
           <SectionIntro index="01" label="THE PERSON BEHIND THE FRAME" />
@@ -118,6 +124,7 @@ export default function Portfolio() {
       <section className="strengths section-pad" id="strengths" aria-labelledby="strengths-heading"><div className="container"><SectionIntro index="03" label="WHAT I BRING TO THE FRAME" /><div className="strength-head"><h2 id="strengths-heading">ONE VISION.<br /><em>FOUR LENSES.</em></h2><p>从方向到细节，<br />让每个环节服务同一个视觉目标。</p></div><div className="strength-grid">{site.strengths.map(item => <article className="strength-card" key={item.num}><div className="strength-card-top mono"><span>{item.num} / 04</span><span>↗</span></div><div><span className="strength-symbol" aria-hidden="true">{item.num === '03' ? <AsteriskMark /> : item.num === '01' ? '◯' : item.num === '02' ? '▧' : '⌁'}</span><h3>{item.title}</h3><p className="mono strength-en">{item.en}</p><p className="strength-text">{item.text}</p></div></article>)}</div></div></section>
 
       <footer className="contact" id="contact"><div className="container contact-inner"><div className="contact-top mono"><span>04 / LET'S MAKE SOMETHING MATTER</span><span>{site.location}</span></div><div className="contact-main"><p>有想法？让我们聊聊。</p><h2>LET'S<br /><em>CREATE.</em></h2><a className="email-button" href={`mailto:${site.email}`}>发起合作 <Arrow diagonal /></a></div><div className="contact-bottom"><div><span className="mono">EMAIL</span><a href={`mailto:${site.email}`}>{site.email}</a></div><div><span className="mono">PHONE</span><a href={`tel:${site.phone}`}>{site.phone}</a></div><div><span className="mono">WECHAT</span><span>{site.wechat}</span></div><div className="footer-tools"><a href="/admin" className="admin-entry mono">管理项目 ↗</a><a href="#home" className="backtop mono">BACK TO TOP ↑</a></div></div><div className="footer-line mono"><span>© {new Date().getFullYear()} {site.name}</span><span>DIRECTED WITH INTENTION.</span></div></div></footer>
+      </div>
     </main>
     <dialog
       ref={videoDialogRef}

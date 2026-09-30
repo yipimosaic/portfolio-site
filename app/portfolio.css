@@ -23,6 +23,21 @@ body.is-opening{overflow:hidden}.opening-screen{position:fixed;inset:0;z-index:1
 .about-big-asterisk{display:block;width:110px;height:110px;flex:none}.strength-symbol svg{display:block;width:1em;height:1em}@media(max-width:760px){.about-big-asterisk{width:70px;height:70px}}
 
 /* Project video preview */
+/* One viewport-sized wave surface shared by every section below the hero. */
+.wave-sections{position:relative;isolation:isolate;background:#0b0c0b;color:#f0efe9}
+.wave-backdrop{position:sticky;top:0;height:100vh;height:100lvh;margin-bottom:-100vh;margin-bottom:-100lvh;pointer-events:none;z-index:0;overflow:hidden;background:#0b0c0b}
+.wave-backdrop-shade{position:absolute;inset:0;background:rgba(11,12,11,.45)}
+.wave-sections>.about,.wave-sections>.work,.wave-sections>.strengths,.wave-sections>.contact{position:relative;z-index:1;background:transparent;color:#f0efe9}
+.wave-sections h2,.wave-sections h3,.wave-sections .about h2 em,.wave-sections .strength-head h2 em,.wave-sections .contact-main h2 em,.wave-sections .period{color:#fff}
+.wave-sections .about-detail,.wave-sections .strength-text,.wave-sections .stat span,.wave-sections .project-meta,.wave-sections .project-en,.wave-sections .contact-bottom .mono,.wave-sections .footer-line{color:#c2c3bb}
+.wave-sections .section-intro{border-top-color:#73766d}
+.wave-sections .about-contact,.wave-sections .about-contact a,.wave-sections .stats,.wave-sections .stat,.wave-sections .strength-grid,.wave-sections .strength-card,.wave-sections .contact-top,.wave-sections .contact-bottom,.wave-sections .footer-line,.wave-sections .project-meta{border-color:#62655d}
+.wave-sections .photo-tag{background:#0b0c0b;color:#e9eae2}
+.wave-sections .email-button{border-color:#d8dad0;background:rgba(11,12,11,.35);color:#f0efe9}
+.wave-sections .email-button:hover,.wave-sections .email-button:focus-visible{background:#f0efe9;color:#10110f}
+.wave-sections a:focus-visible{outline:2px solid #f0efe9;outline-offset:5px}
+.wave-sections ::selection{background:#f0efe9;color:#10110f}
+
 .project-play-button{display:block;width:100%;height:100%;padding:0;border:0;background:#000;color:inherit;text-align:left;cursor:pointer}
 .project-browse-button{display:block;width:100%;height:100%;padding:0;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer}
 .project-play-button:focus-visible{outline:2px solid #eff0e9;outline-offset:-4px}
