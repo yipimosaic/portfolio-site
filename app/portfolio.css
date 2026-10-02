@@ -39,6 +39,9 @@ body.is-opening{overflow:hidden}.opening-screen{position:fixed;inset:0;z-index:1
 .wave-sections ::selection{background:#f0efe9;color:#10110f}
 
 /* Soft reading zones stay attached to the copy as the waves move behind it. */
+.about #about-heading{font-family:Inter,'Noto Sans SC',Arial,sans-serif;font-weight:800;font-size:clamp(52px,7.1vw,132px);line-height:.88;letter-spacing:-.095em}
+.about #about-heading em{display:inline-block;white-space:nowrap}
+@media(max-width:760px){.about #about-heading{font-size:clamp(40px,13.5vw,94px)}}
 .wave-sections .about{overflow:clip}
 .wave-sections .about-left,.wave-sections .about-right,.wave-sections .stats{position:relative;isolation:isolate}
 .wave-sections .about-left::before,.wave-sections .about-right::before,.wave-sections .stats::before{content:"";position:absolute;z-index:-1;pointer-events:none}
