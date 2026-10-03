@@ -21,7 +21,8 @@ export const site = {
     { no: '01', title: 'MG', english: 'MOTION PROJECT / VIDEO', category: '动态影像 / 视频', year: '—', image: '/media/MG-cover-dark.png', alt: 'MG 视频封面：黑色背景中带轮廓光的足球鞋', video: '/media/MG-web.mp4' },
     { no: '02', title: '项目名称待补充', english: 'PROJECT TITLE / 02', category: '摄影指导 / 视觉', year: '20XX', image: '/media/project-02.jpg', alt: '摄影机设备示意图' },
     { no: '03', title: '项目名称待补充', english: 'PROJECT TITLE / 03', category: '美术指导 / 场景', year: '20XX', image: '/media/project-03.jpg', alt: '自然场景示意图' },
-    { no: '04', title: 'TLSS TACTICIAN ROD', english: 'ESSENCE COLLECTION / VIDEO', category: '动态影像 / 视频', year: '—', image: '/media/ROOTOUCH-cover.png', alt: 'TLSS TACTICIAN ROD ESSENCE COLLECTION 视频封面', video: '/media/ROOTOUCH-web.mp4' }
+    { no: '04', title: 'TLSS TACTICIAN ROD', english: 'ESSENCE COLLECTION / VIDEO', category: '动态影像 / 视频', year: '—', image: '/media/ROOTOUCH-cover.png', alt: 'TLSS TACTICIAN ROD ESSENCE COLLECTION 视频封面', video: '/media/ROOTOUCH-web.mp4' },
+    { no: '06', title: '舞剧《大熊猫》宣传片', english: 'GIANT PANDA / DANCE DRAMA FILM', category: '舞剧宣传片 / 视频', year: '—', image: '/media/panda-film-cover.png', alt: '舞剧《大熊猫》宣传片封面', video: '/media/panda-film-web.mp4' }
   ],
   strengths: [
     { num: '01', title: '导演与叙事', en: 'DIRECTION', text: '从概念和脚本出发，统筹人物、节奏与画面，让想法形成清晰的影像表达。' },
