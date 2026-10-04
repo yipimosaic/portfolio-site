@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 async function getFile(request, context, headOnly = false) {
   try {
     const { key } = await context.params;
-    if (!/^[a-f0-9-]{36}\.(jpg|png|webp|avif|mp4|webm)$/.test(key)) return new Response("Not found", { status: 404 });
+    if (!/^[a-f0-9-]{36}\.(jpg|png|webp|avif|mp4|webm|mp3)$/.test(key)) return new Response("Not found", { status: 404 });
     const bucket = getMediaBucket();
     const metadata = await bucket.head(key);
     if (!metadata) return new Response("Not found", { status: 404 });
@@ -49,3 +49,4 @@ async function getFile(request, context, headOnly = false) {
 
 export async function GET(request, context) { return getFile(request, context); }
 export async function HEAD(request, context) { return getFile(request, context, true); }
+

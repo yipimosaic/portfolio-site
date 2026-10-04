@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import MusicAdmin from './music-admin'
 
 const emptyProject = (sortOrder = 1) => ({
   title: '', english: '', category: '', year: '', description: '', gallery: [],
@@ -138,7 +139,7 @@ export default function AdminClient() {
   return <main className="admin-root">
     <header className="admin-header">
       <div><p className="admin-kicker">PRIVATE WORKSPACE / 项目管理</p><h1>PROJECT<br /><em>DESK.</em></h1></div>
-      <div className="admin-header-actions"><span>{String(projects.length).padStart(2, '0')} PROJECTS</span><a href="/" target="_blank" rel="noreferrer">查看作品集 ↗</a></div>
+      <div className="admin-header-actions"><a href="#music-admin">音乐管理 ↓</a><span>{String(projects.length).padStart(2, '0')} PROJECTS</span><a href="/" target="_blank" rel="noreferrer">查看作品集 ↗</a></div>
     </header>
 
     <div className="admin-layout">
@@ -173,5 +174,6 @@ export default function AdminClient() {
         </form>
       </section>
     </div>
-  </main>
+  <MusicAdmin /></main>
 }
+

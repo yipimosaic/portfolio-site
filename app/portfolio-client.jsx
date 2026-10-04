@@ -4,6 +4,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { site } from './content'
 import { initMotion } from './motion'
 import PatternWaves from './components/PatternWaves'
+import MusicPlayer from './components/MusicPlayer'
 
 const Arrow = ({ diagonal = false }) => <span aria-hidden="true">{diagonal ? '↗' : '→'}</span>
 const AsteriskMark = ({ className = '' }) => <svg className={className} viewBox="0 0 100 100" fill="none" aria-hidden="true" focusable="false"><path d="M50 5v90M5 50h90M18 18l64 64M82 18 18 82" stroke="currentColor" strokeWidth="5" strokeLinecap="square" /></svg>
@@ -15,6 +16,7 @@ export default function Portfolio() {
   const [activeGallery, setActiveGallery] = useState(null)
   const [galleryIndex, setGalleryIndex] = useState(0)
   const [projects, setProjects] = useState(site.projects)
+  const [videoEnded, setVideoEnded] = useState(false)
   const videoDialogRef = useRef(null)
   const galleryDialogRef = useRef(null)
   const closeMenu = () => setMenuOpen(false)
@@ -32,7 +34,7 @@ export default function Portfolio() {
     const dialog = videoDialogRef.current
     if (!dialog) return
     if (activeVideo && !dialog.open) {
-      dialog.showModal()
+      setVideoEnded(false); dialog.showModal()
       dialog.querySelector('video')?.play().catch(() => {})
     } else if (!activeVideo && dialog.open) {
       dialog.close()
@@ -126,6 +128,7 @@ export default function Portfolio() {
       <footer className="contact" id="contact"><div className="container contact-inner"><div className="contact-top mono"><span>04 / LET'S MAKE SOMETHING MATTER</span><span>{site.location}</span></div><div className="contact-main"><p>有想法？让我们聊聊。</p><h2>LET'S<br /><em>CREATE.</em></h2><a className="email-button" href={`mailto:${site.email}`}>发起合作 <Arrow diagonal /></a></div><div className="contact-bottom"><div><span className="mono">EMAIL</span><a href={`mailto:${site.email}`}>{site.email}</a></div><div><span className="mono">PHONE</span><a href={`tel:${site.phone}`}>{site.phone}</a></div><div><span className="mono">WECHAT</span><span>{site.wechat}</span></div><div className="footer-tools"><a href="/admin" className="admin-entry mono">管理项目 ↗</a><a href="#home" className="backtop mono">BACK TO TOP ↑</a></div></div><div className="footer-line mono"><span>© {new Date().getFullYear()} {site.name}</span><span>DIRECTED WITH INTENTION.</span></div></div></footer>
       </div>
     </main>
+    <MusicPlayer suspended={Boolean(activeVideo) && !videoEnded} />
     <dialog
       ref={videoDialogRef}
       className="video-dialog"
@@ -135,7 +138,7 @@ export default function Portfolio() {
     >
       <div className="video-dialog-inner">
         <div className="video-dialog-top mono"><span>{activeVideo ? `PROJECT ${activeVideo.no} / ${activeVideo.title}` : 'PROJECT VIDEO'}</span><button type="button" onClick={() => setActiveVideo(null)} aria-label="关闭视频">CLOSE ×</button></div>
-        {activeVideo && <video key={activeVideo.video} src={activeVideo.video} poster={activeVideo.image} controls playsInline preload="metadata" />}
+        {activeVideo && <video onPlay={() => setVideoEnded(false)} onEnded={() => setVideoEnded(true)} key={activeVideo.video} src={activeVideo.video} poster={activeVideo.image} controls playsInline preload="metadata" />}
       </div>
     </dialog>
     <dialog
@@ -163,3 +166,5 @@ function ProjectImage({ project, onPlay, onBrowse }) {
 }
 
 function SectionIntro({ index, label }) { return <div className="section-intro mono"><span>/{index}</span><span>{label}</span><span className="intro-line" /></div> }
+
+
