@@ -5,7 +5,8 @@ export default function MusicPlayer({ suspended }) {
   const audio = useRef(null)
   const [tracks, setTracks] = useState([])
   const [index, setIndex] = useState(0)
-  const [wanted, setWanted] = useState(false)
+  const [wanted, setWanted] = useState(true)
+  const [waitingGesture, setWaitingGesture] = useState(false)
   const [playing, setPlaying] = useState(false)
   const [expanded, setExpanded] = useState(false)
   const [volume, setVolume] = useState(0.35)
@@ -27,11 +28,29 @@ export default function MusicPlayer({ suspended }) {
     let cancelled = false
     if (wanted && !suspended && track) {
       element.play().catch(err => {
-        if (!cancelled && err.name !== 'AbortError') { setWanted(false); setError('点击播放继续收听') }
+        if (!cancelled && err.name !== 'AbortError') {
+          setWanted(false)
+          setWaitingGesture(err.name === 'NotAllowedError')
+          setError(err.name === 'NotAllowedError' ? '轻触页面，开启音乐' : '点击播放继续收听')
+        }
       })
     } else element.pause()
     return () => { cancelled = true }
   }, [wanted, suspended, track])
+  useEffect(() => {
+    if (!waitingGesture || suspended || !track) return
+    function unlock(event) {
+      if (event.type === 'keydown' && event.key !== 'Enter' && event.key !== ' ') return
+      if (event.target.closest?.('.music-widget, .project-play-button, dialog')) return
+      // Call play directly within the user gesture for mobile browsers.
+      audio.current?.play().then(() => {
+        setWaitingGesture(false); setError(''); setWanted(true)
+      }).catch(() => {})
+    }
+    document.addEventListener('click', unlock)
+    document.addEventListener('keydown', unlock)
+    return () => { document.removeEventListener('click', unlock); document.removeEventListener('keydown', unlock) }
+  }, [waitingGesture, suspended, track])
   function next() {
     setError('')
     if (tracks.length === 1) { audio.current.currentTime = 0; if (wanted && !suspended) audio.current.play().catch(() => setWanted(false)) }
@@ -41,7 +60,7 @@ export default function MusicPlayer({ suspended }) {
   return <aside className={`music-widget mono${playing ? ' is-playing' : ''}`} aria-label="背景音乐">
     <audio ref={audio} src={track.url} preload="none" onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={next} onError={() => { setWanted(false); setError('这首暂时无法播放，请切换下一首') }} />
     <div className="music-strip">
-      <button className="music-toggle" type="button" aria-label={wanted ? '暂停背景音乐' : '播放背景音乐'} aria-pressed={wanted} onClick={() => { setError(''); setWanted(v => !v) }}>{wanted ? 'Ⅱ' : '▶'}</button>
+      <button className="music-toggle" type="button" aria-label={wanted ? '暂停背景音乐' : '播放背景音乐'} aria-pressed={wanted} onClick={() => { setWaitingGesture(false); setError(''); setWanted(v => !v) }}>{wanted ? 'Ⅱ' : '▶'}</button>
       <button className="music-expand" type="button" aria-expanded={expanded} aria-controls="music-panel" onClick={() => setExpanded(v => !v)}><span className="music-bars" aria-hidden="true"><i/><i/><i/><i/></span><span>SOUND {suspended && wanted ? '/ HOLD' : playing ? '/ ON' : '/ OFF'}</span><span>{expanded ? '−' : '+'}</span></button>
       <button type="button" className="music-next" onClick={next} aria-label="下一首背景音乐">↦</button>
     </div>
